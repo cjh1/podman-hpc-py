@@ -1,36 +1,24 @@
-[build-system]
-requires = ["hatchling", "hatch-vcs"]
-build-backend = "hatchling.build"
-
-[tool.hatch.version]
-source = "vcs"
-
-
-[project]
-name = "podman-hpc-py"
-dynamic = ['version']
-dependencies = [
-  "podman-hpc==1.1.0",
-  "pyyaml",
-  "podman"
-]
-
-[tool.hatch.build.targets.wheel]
-packages = ["."]
-
-requires-python = ">=3.8"
-authors = [
-  { name="Chris Harris", email="cjh@lbl.gov" },
-]
+[tool.poetry]
+name = "podman-hpc-client"
+version = "0.0.1"
 description = "Python bindings for Podman HPC RESTful API"
+authors = ["Chris Harris <cjh@lbl.gov>"]
 readme = "README.md"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: BSD License",
-    "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
 ]
 
-[project.optional-dependencies]
-test = [
-  "pytest"
-]
+[tool.poetry.dependencies]
+python = ">=3.8"
+podman-hpc = "1.1.0"
+pyyaml = "*"
+podman = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
