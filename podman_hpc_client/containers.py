@@ -171,4 +171,4 @@ class PodmanHpcContainersManager(ContainersManager):
         remove: bool = False,
         **kwargs,
     ) -> Union[Container, Union[Generator[str, None, None], Iterator[str]]]:
-        return super().run(image, command, stdout, stderr, remove, **kwargs)
+        return super().run(image, command=command, stdout=stdout, stderr=stderr, remove=remove, **kwargs)
