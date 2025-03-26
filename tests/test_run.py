@@ -39,9 +39,10 @@ def test_run_gpu(api_service, test_uri):
             "Type": "json-file",
         }
 
-        # First type without --gpus
+        # First type without --gpu
         try:
-            output = client.containers.run(
+
+            client.containers.run(
                 image.id,
                 command=command,
                 stdout=True,
@@ -54,15 +55,23 @@ def test_run_gpu(api_service, test_uri):
         except ContainerError:
             pass
 
-            output = client.containers.run(
-                image.id,
-                command=command,
-                stdout=True,
-                stderr=True,
-                log_config=log_config,
-                remove=True,
-                gpu=True,
-            )
+            container = None
+            try:
+                container = client.containers.create(
+                    image.id,
+                    command=command,
+                    stdout=True,
+                    stderr=True,
+                    log_config=log_config,
+                    gpu=True,
+                )
+                container.start()
+                container.wait()
+
+                output = b''.join(container.logs())
+            finally:
+                if container:
+                    container.remove()
 
         # assert that we have at least one GPU
         assert "GPU 0" in output.decode("utf-8")

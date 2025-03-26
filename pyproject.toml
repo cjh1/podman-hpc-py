@@ -10,9 +10,9 @@ source = "vcs"
 name = "podman-hpc-py"
 dynamic = ['version']
 dependencies = [
-  "podman-hpc==1.1.0",
+  "podman-hpc==1.1.4",
   "pyyaml",
-  "podman"
+  "podman==5.4.0.1"
 ]
 
 [tool.hatch.build.targets.wheel]
