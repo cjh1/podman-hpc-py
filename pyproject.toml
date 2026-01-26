@@ -1,36 +1,32 @@
-[build-system]
-requires = ["hatchling", "hatch-vcs"]
-build-backend = "hatchling.build"
-
-[tool.hatch.version]
-source = "vcs"
-
-
 [project]
-name = "podman-hpc-py"
-dynamic = ['version']
-dependencies = [
-  "podman-hpc==1.1.4",
-  "pyyaml",
-  "podman==5.4.0.1"
-]
-
-[tool.hatch.build.targets.wheel]
-packages = ["."]
-
-requires-python = ">=3.8"
+name = "podman-hpc-client"
+version = "0.1.0"
+description = "Python bindings for Podman HPC RESTful API"
+readme = "README.md"
 authors = [
   { name="Chris Harris", email="cjh@lbl.gov" },
 ]
-description = "Python bindings for Podman HPC RESTful API"
-readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "podman==5.4.0.1",
+    "podman-hpc",
+    "pyyaml>=6.0.3",
+]
+
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
 ]
 
-[project.optional-dependencies]
-test = [
-  "pytest"
+[build-system]
+requires = ["uv_build>=0.8.15,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+podman-hpc = { git = "https://github.com/cjh1/podman-hpc", rev = "d01773a8ae14489af7654d799d9738a2c5629248" }
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
 ]
