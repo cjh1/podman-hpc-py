@@ -5,12 +5,14 @@ build-backend = "hatchling.build"
 [tool.hatch.version]
 source = "vcs"
 
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [project]
 name = "podman-hpc-py"
 dynamic = ['version']
 dependencies = [
-  "podman-hpc==1.1.4",
+  "podman-hpc @ git+https://github.com/cjh1/podman-hpc@d01773a8ae14489af7654d799d9738a2c5629248",
   "pyyaml",
   "podman==5.4.0.1"
 ]
