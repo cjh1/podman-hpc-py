@@ -1,12 +1,12 @@
 from typing import List, Union, Iterator, Optional
-
+import os
 
 from podman.client import (
     ImagesManager,
 )
 from podman.domain.images import Image
 
-from podman_hpc.migrate2scratch import MigrateUtils
+from podman_hpc.migrate2scratch import MigrateUtils, ImageStore
 
 
 class PodmanHpcImagesManager(ImagesManager):
@@ -27,6 +27,14 @@ class PodmanHpcImagesManager(ImagesManager):
         # Now migrate the images
         for image in images if isinstance(images, list) else [images]:
             mu = MigrateUtils(conf=self._site_config)
+            mu._lazy_init()  # sets mu.src_dir / mu.dst_dir
+
+            # Ensure graph_root metadata exists
+            store = ImageStore(mu.src_dir, read_only=False)
+            if not (
+                os.path.exists(store.layers_json) and os.path.exists(store.images_json)
+            ):
+                store.init_storage()
             tags = image.tags
 
             if not tags:
