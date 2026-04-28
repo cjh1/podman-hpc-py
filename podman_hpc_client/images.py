@@ -9,6 +9,14 @@ from podman.domain.images import Image
 from podman_hpc.migrate2scratch import MigrateUtils
 
 
+class PodmanHpcMigrationError(RuntimeError):
+    def __init__(self, image: str):
+        self.image = image
+        super().__init__(
+            f"podman-hpc failed to migrate image {image!r} to the squash store"
+        )
+
+
 class PodmanHpcImagesManager(ImagesManager):
     def __init__(self, site_config, **kwargs):
         self._site_config = site_config
@@ -32,6 +40,7 @@ class PodmanHpcImagesManager(ImagesManager):
             if not tags:
                 raise RuntimeError(f"Pull failed for Image: {repository}/{tag} ")
 
-            mu.migrate_image(tags[0])
+            if not mu.migrate_image(tags[0]):
+                raise PodmanHpcMigrationError(tags[0])
 
         return images
